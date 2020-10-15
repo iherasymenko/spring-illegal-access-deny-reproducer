@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework:spring-framework-bom:5.2.9.RELEASE'
+    }
+}
+
+dependencies {
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-jdbc'
+    implementation 'org.springframework:spring-tx'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+tasks.withType(JavaCompile) { task ->
+    task.options.release = 11
+    task.options.encoding = 'UTF-8'
+}
+
+tasks.register('runWithIllegalAccessDeny', JavaExec) { task ->
+    task.group = 'application'
+    task.classpath = sourceSets.main.runtimeClasspath
+    task.mainClass = 'com.example.Main'
+    task.jvmArgs('--illegal-access=deny')
+}
+
+tasks.register('runWithIllegalAccessWarn', JavaExec) { task ->
+    task.group = 'application'
+    task.classpath = sourceSets.main.runtimeClasspath
+    task.mainClass = 'com.example.Main'
+    task.jvmArgs('--illegal-access=warn')
+}
