@@ -21,6 +21,7 @@ dependencies {
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
+java.modularity.inferModulePath = true
 
 tasks.withType(JavaCompile) { task ->
     task.options.release = 11
@@ -39,4 +40,12 @@ tasks.register('runWithIllegalAccessWarn', JavaExec) { task ->
     task.classpath = sourceSets.main.runtimeClasspath
     task.mainClass = 'com.example.Main'
     task.jvmArgs('--illegal-access=warn')
+}
+
+tasks.register('runOnModulePath', JavaExec) {task ->
+    task.group = 'application'
+    task.mainModule = 'com.example'
+    task.mainClass = 'com.example.Main'
+    task.modularity.inferModulePath = true
+    task.classpath = files(jar, configurations.runtimeClasspath)
 }
